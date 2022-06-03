@@ -16,75 +16,94 @@ BG_COLOR = 'white'
 FONT = ('Helvetica', 20)
 player = 1
 count = 0
-board = {}
 
 
-def clicked(b):
-    global player, count
-    if b['text'] == ' ':
-        if player == 1:
-            b['text'] = 'O'
-            player = 2
-            count += 1
-        elif player == 2:
-            b['text'] = 'X'
-            player = 1
-            count += 1
-    else:
-        messagebox.showerror('Tic Tac Toe',
-                             'Position already played, play another position !')
+class Tictactoe:
+    def __init__(self):
+        self.board = [[' ' for x in range(3)] for y in range(3)]
 
-    if count >= 5:
-        checkWin()
+    def generateBoard(self):
+        for x in range(2):
+            for y in range(2):
+                print(x, y)
+                self.board[x][y] = ' '
 
+    def clicked(self, b, x, y):
+        print(self.board)
+        global player, count
+        if b['text'] == ' ':
+            if player == 1:
+                b['text'] = 'O'
+                player = 2
+                count += 1
+                self.board[x][y] = 'O'
+                self.checkWin(x, y, 'O')
+            elif player == 2:
+                b['text'] = 'X'
+                player = 1
+                count += 1
+                self.board[x][y] = 'X'
+                self.checkWin(x, y, 'X')
+        else:
+            messagebox.showerror('Tic Tac Toe',
+                                 'Position already played, play another position !')
 
-def checkWin():
-    pass
-
-
-root = tk.Tk()
-root.title('Tic Tac Toe')
-root.iconbitmap('~/GitHub/tictactoe/img/Tic_tac_toe.xbm')
-root.resizable(False, False)
-# root.geometry(W_DIMENSIONS)
-
-b1 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b1))
-b2 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b2))
-b3 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b3))
-b4 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b4))
-b5 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b5))
-b6 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b6))
-b7 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b7))
-b8 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b8))
-b9 = tk.Button(root, bg=BG_COLOR, font=FONT, text=' ', height=3,
-               width=6, highlightthickness=0, command=lambda: clicked(b9))
+    def checkWin(self, x, y, state):
+        # check column
+        for i in range(3):
+            if self.board[i][y] != state:
+                break
+            elif i == 2:
+                match state:
+                    case 'O':
+                        messagebox.showinfo(
+                            'YOU WIN', 'Congratulations you won !')
+                        break
+                    case 'X':
+                        messagebox.showinfo(
+                            'YOU WIN', 'Congratulations you won !')
+                        break
 
 
-def generateBoard():
-    for x in range(1, 10):
-        board['b{0}'.format(x)] = ' '
+class Application:
+    def __init__(self, ):
+        tictactoe = Tictactoe()
+        self.root = tk.Tk()
+        self.root.title('Tic Tac Toe')
+        self.root.iconbitmap('~/GitHub/tictactoe/img/Tic_tac_toe.xbm')
+        self.root.resizable(False, False)
+        # self.root.geometry(W_DIMENSIONS)
+
+        b1 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b1, 0, 0))
+        b2 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b2, 1, 0))
+        b3 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b3, 2, 0))
+        b4 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b4, 0, 1))
+        b5 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b5, 1, 1))
+        b6 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b6, 2, 1))
+        b7 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b7, 0, 2))
+        b8 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b8, 1, 2))
+        b9 = tk.Button(self.root, bg=BG_COLOR, font=FONT, text=' ', height=3,
+                       width=6, highlightthickness=0, command=lambda: tictactoe.clicked(b9, 2, 2))
+
+        b1.grid(row=0, column=0, sticky='NSEW')
+        b2.grid(row=0, column=1, sticky='NSEW')
+        b3.grid(row=0, column=2, sticky='NSEW')
+        b4.grid(row=1, column=0, sticky='NSEW')
+        b5.grid(row=1, column=1, sticky='NSEW')
+        b6.grid(row=1, column=2, sticky='NSEW')
+        b7.grid(row=2, column=0, sticky='NSEW')
+        b8.grid(row=2, column=1, sticky='NSEW')
+        b9.grid(row=2, column=2, sticky='NSEW')
+
+        self.root.mainloop()
 
 
-b1.grid(row=0, column=0, sticky='NSEW')
-b2.grid(row=0, column=1, sticky='NSEW')
-b3.grid(row=0, column=2, sticky='NSEW')
-b4.grid(row=1, column=0, sticky='NSEW')
-b5.grid(row=1, column=1, sticky='NSEW')
-b6.grid(row=1, column=2, sticky='NSEW')
-b7.grid(row=2, column=0, sticky='NSEW')
-b8.grid(row=2, column=1, sticky='NSEW')
-b9.grid(row=2, column=2, sticky='NSEW')
-
-generateBoard()
-print(board)
-
-
-root.mainloop()
+app = Application()
