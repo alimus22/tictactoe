@@ -25,45 +25,85 @@ class Tictactoe:
     def generateBoard(self):
         for x in range(2):
             for y in range(2):
-                print(x, y)
                 self.board[x][y] = ' '
 
     def clicked(self, b, x, y):
-        print(self.board)
         global player, count
         if b['text'] == ' ':
             if player == 1:
                 b['text'] = 'O'
                 player = 2
                 count += 1
-                self.board[x][y] = 'O'
+                self.board[y][x] = 'O'
                 self.checkWin(x, y, 'O')
             elif player == 2:
                 b['text'] = 'X'
                 player = 1
                 count += 1
-                self.board[x][y] = 'X'
+                self.board[y][x] = 'X'
                 self.checkWin(x, y, 'X')
         else:
             messagebox.showerror('Tic Tac Toe',
                                  'Position already played, play another position !')
 
     def checkWin(self, x, y, state):
-        # check column
+        self.check_col(x, state)
+        self.check_rows(y, state)
+        self.check_diagonal(state)                
+    
+    def check_col(self, x, state):
         for i in range(3):
-            if self.board[i][y] != state:
+            if self.board[i][x] != state:
                 break
             elif i == 2:
-                match state:
-                    case 'O':
-                        messagebox.showinfo(
-                            'YOU WIN', 'Congratulations you won !')
-                        break
-                    case 'X':
-                        messagebox.showinfo(
-                            'YOU WIN', 'Congratulations you won !')
-                        break
+                if state == 'O':
+                    messagebox.showinfo(
+                        'YOU WIN', 'Congratulations you won !')
+                    return
+                elif state == 'X':
+                    messagebox.showinfo(
+                        'COMPUTER WIN', 'Computer won !')
+                    return
 
+    
+    def check_rows(self, y, state):
+        for i in range(3):
+            if self.board[y][i] != state:
+                break
+            elif i == 2:
+                if state == 'O':
+                    messagebox.showinfo(
+                        'YOU WIN', 'Congratulations you won !')
+                    return
+                elif state == 'X':
+                    messagebox.showinfo(
+                        'COMPUTER WIN', 'Computer won !')
+                    return
+
+
+    def check_diagonal(self, state):
+        won = 0
+
+        for i in range(3):
+            if self.board[0 + i][0 + i] != state:
+                won += 1
+                break
+        if won == 1:
+            for i in range(3):
+                print('(', 2- i, ', ', 0 + i, ')')
+                if self.board[2 - i][0 + i] != state:
+                    won += 1
+                    return
+        print('won:', won)
+        if won < 2:
+            if state == 'O':
+                messagebox.showinfo(
+                    'YOU WIN', 'Congratulations you won !')
+                return
+            elif state == 'X':
+                messagebox.showinfo(
+                    'COMPUTER WIN', 'Computer won !')
+                return
 
 class Application:
     def __init__(self, ):
